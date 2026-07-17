@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hong Kong Country Park Facilities Explorer</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- Header -->
+<div id="header">
+    <h1>HK Country Parks <span>Facilities Explorer</span></h1>
+    <div id="search-box">
+        <input type="text" id="search-input" placeholder="Search parks, trails, facilities..." autocomplete="off" />
+        <div id="search-results"></div>
+    </div>
+</div>
+
+<!-- Main Container -->
+<div id="main-container">
+    <!-- Sidebar -->
+    <div id="sidebar">
+
+        <!-- Map Layers -->
+        <div class="sidebar-section" id="layers-section">
+            <h3>Map Layers</h3>
+            <div class="section-content">
+                <label class="layer-toggle">
+                    <input type="checkbox" id="layer-parks" checked>
+                    <span class="layer-switch"></span>
+                    <span class="layer-color" style="background:#e74c3c"></span>
+                    <span class="layer-info">
+                        <span class="layer-name">Country Parks</span>
+                        <span class="layer-desc">25 park locations</span>
+                    </span>
+                </label>
+                <label class="layer-toggle">
+                    <input type="checkbox" id="layer-trails" checked>
+                    <span class="layer-switch"></span>
+                    <span class="layer-color" style="background:#3498db"></span>
+                    <span class="layer-info">
+                        <span class="layer-name">Hiking Trails</span>
+                        <span class="layer-desc">165 trail routes</span>
+                    </span>
+                </label>
+                <label class="layer-toggle">
+                    <input type="checkbox" id="layer-centres">
+                    <span class="layer-switch"></span>
+                    <span class="layer-color" style="background:#f39c12"></span>
+                    <span class="layer-info">
+                        <span class="layer-name">Visitor Centres</span>
+                        <span class="layer-desc">8 centres</span>
+                    </span>
+                </label>
+                <label class="layer-toggle">
+                    <input type="checkbox" id="layer-campsites">
+                    <span class="layer-switch"></span>
+                    <span class="layer-color" style="background:#8e44ad"></span>
+                    <span class="layer-info">
+                        <span class="layer-name">Campsites</span>
+                        <span class="layer-desc">41 campsite locations</span>
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Filter by Park / District -->
+        <div class="sidebar-section" id="filter-section">
+            <h3>Filter by Park / Area</h3>
+            <div class="section-content">
+                <!-- Filter tabs -->
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="park">By Park</button>
+                    <button class="filter-tab" data-filter="district">By District</button>
+                </div>
+
+                <!-- Park filter panel -->
+                <div class="filter-panel active" id="filter-panel-park">
+                    <div class="filter-search-box">
+                        <input type="text" id="park-search-input" placeholder="Search parks..." autocomplete="off">
+                    </div>
+                    <div class="filter-list" id="park-filter-list">
+                        <div class="filter-list-loading">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- District filter panel -->
+                <div class="filter-panel" id="filter-panel-district">
+                    <div class="filter-search-box">
+                        <input type="text" id="district-search-input" placeholder="Search districts..." autocomplete="off">
+                    </div>
+                    <div class="filter-list" id="district-filter-list">
+                        <div class="filter-list-loading">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Active filter indicator -->
+                <div class="active-filter-bar" id="active-filter-bar" style="display:none;">
+                    <span id="active-filter-label"></span>
+                    <button class="filter-clear-btn" id="btn-clear-filter" title="Clear filter">&times;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location & Navigation -->
+        <div class="sidebar-section" id="location-section">
+            <h3>Location &amp; Navigation</h3>
+            <div class="section-content">
+                <button class="nav-btn" id="btn-locate">
+                    <span class="nav-btn-icon">&#9906;</span> My Location
+                </button>
+                <button class="nav-btn" id="btn-track">
+                    <span class="nav-btn-icon">&#9678;</span> Track Me
+                </button>
+                <div id="loc-status" class="loc-status"></div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="sidebar-section" id="stats-section">
+            <h3>Statistics</h3>
+            <div class="section-content">
+                <div class="stat-row">
+                    <span class="stat-label">Country Parks</span>
+                    <span class="stat-value" id="stat-parks">25</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Hiking Trails</span>
+                    <span class="stat-value" id="stat-trails">165</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Visitor Centres</span>
+                    <span class="stat-value" id="stat-centres">8</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Campsites</span>
+                    <span class="stat-value" id="stat-campsites">41</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- About -->
+        <div class="sidebar-section" id="about-section">
+            <h3>About</h3>
+            <div class="section-content">
+                <p style="font-size:12px;color:#777;line-height:1.6;">
+                    An interactive Web GIS application for exploring Hong Kong's country park facilities.
+                    Data sourced from <strong>CSDI</strong> (Common Spatial Data Infrastructure).
+                    Routing powered by <strong>OSRM</strong>.
+                </p>
+                <p style="font-size:11px;color:#aaa;margin-top:8px;">
+                    GEOD7311 Web GIS &mdash; The University of Hong Kong
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map -->
+    <div id="map"></div>
+</div>
+
+<!-- Detail Panel (floating) -->
+<div id="detail-panel">
+    <button class="close-btn" id="detail-close">&times;</button>
+    <h2 id="detail-title"></h2>
+    <div class="detail-grid" id="detail-grid"></div>
+</div>
+
+<!-- Route Info Bar (floating) -->
+<div id="route-info"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<!-- App JS -->
+<script src="js/app.js"></script>
+
+</body>
+</html>
